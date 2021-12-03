@@ -15,7 +15,7 @@ class ItemDetail extends StatefulWidget {
 }
 
 class _ItemDetailState extends State<ItemDetail> {
-  int index = 2;
+  int index = 0;
   final _preferencesService = PreferencesService();
   final Product item;
   int _quantity = 1;
@@ -29,8 +29,7 @@ class _ItemDetailState extends State<ItemDetail> {
   void _populateitem() async {
     final data = await _preferencesService.getSettings();
     if (data == null) {
-    } else {
-    }
+    } else {}
   }
 
   _ItemDetailState(this.item);
@@ -80,7 +79,19 @@ class _ItemDetailState extends State<ItemDetail> {
             items: items,
             index: index,
             height: size.height * 0.08,
-            onTap: (index) => setState(() => this.index = index),
+            onTap: (index) => setState(() {
+              this.index = index;
+              switch (index) {
+                case 0:
+                  Navigator.of(context).pushNamed("/");
+                  break;
+                case 1:
+                  Navigator.of(context).pushNamed("/");
+                  break;
+                default:
+                  return;
+              }
+            }),
           ),
         ),
         appBar: AppBar(

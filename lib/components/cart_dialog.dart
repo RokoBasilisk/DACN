@@ -44,11 +44,12 @@ class _CartDialogState extends State<CartDialog> {
 
   _CartDialogState(this.size);
 
-  
   @override
   Widget build(BuildContext context) {
+    double total = 0;
     return Dialog(
-      insetPadding: const EdgeInsets.only(right: 0, left: 0, bottom: 0, top: 70),
+      insetPadding:
+          const EdgeInsets.only(right: 0, left: 0, bottom: 0, top: 70),
       shape: const OutlineInputBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(29), topRight: Radius.circular(29)),
@@ -153,9 +154,15 @@ class _CartDialogState extends State<CartDialog> {
                       children: [
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
+                            children: [
                               Text("Total"),
-                              Text("\$24.00"),
+                              Text(() {
+                                for (int i = 0; i < data.length; i++) {
+                                  total =
+                                      total + data[i].price * data[i].quantity;
+                                }
+                                return "\$ ${total.toString()}";
+                              }() ),
                             ]),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -205,7 +212,8 @@ Future postData(BuildContext context) async {
           },
           body: Bill.encode(list).substring(1, Bill.encode(list).length - 1));
       final String responseString = response.body;
-      return jsonDecode(responseString);
+      _preferences.removeCart();
+      Navigator.of(context).pushNamed("/");
     } else {
       Navigator.of(context).pushNamed("/login");
     }

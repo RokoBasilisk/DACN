@@ -38,12 +38,7 @@ Future getData() async {
   if (jsondata['success']) {
     for (var u in jsondata['Products']) {
       Product product = Product(
-          u['title'],
-          u['description'],
-          u['price'],
-          u['image'],
-          u['_id'],
-          0);
+          u['title'], u['description'], u['price'], u['image'], u['_id'], 0);
       products.add(product);
     }
     return products;
@@ -285,6 +280,8 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: (index) => setState(() {
               this.index = index;
               switch (index) {
+                case 0:
+                  break;
                 case 1:
                   Navigator.of(context).pushNamed("/Bill");
                   break;

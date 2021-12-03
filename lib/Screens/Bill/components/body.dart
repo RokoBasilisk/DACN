@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:foodorder/Screens/Bill/components/background.dart';
 import 'package:foodorder/models/bill_history_model.dart';
 import 'package:foodorder/models/product.dart';
+import 'package:foodorder/models/userbody.dart';
 import 'package:foodorder/services/preferences_service.dart';
 import 'package:foodorder/style.dart';
 import 'package:http/http.dart' as http;
@@ -17,11 +18,28 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  Future<UserBody> getUser() async {
+    final _preferencesService = PreferencesService();
+    Set set = await _preferencesService.getToken();
+    Map<String, dynamic> customerId = {"customerId": set.elementAt(1)};
+    final response =
+        await http.post(Uri.http('192.168.1.12:5000', 'api/customer'),
+            headers: {
+              "Content-Type": "application/json",
+              HttpHeaders.authorizationHeader: 'Bearer ${set.elementAt(0)}'
+            },
+            body: jsonEncode(customerId));
+    final jsondata = jsonDecode(response.body);
+    UserBody userbody = UserBody(jsondata['customer']['username'],
+        jsondata['customer']['_id'], jsondata['customer']['createdAt']);
+    return userbody;
+  }
+
   Future getData() async {
     final _preferencesService = PreferencesService();
     Set set = await _preferencesService.getToken();
     Map<String, dynamic> customerId = {"customerId": set.elementAt(1)};
-    final response = await http.post(Uri.http('192.168.1.12:5000', 'api/bill'),
+    final response = await http.post(Uri.http('192.168.1.12:5000', 'api/bill/get'),
         headers: {
           "Content-Type": "application/json",
           HttpHeaders.authorizationHeader: 'Bearer ${set.elementAt(0)}'
@@ -63,14 +81,27 @@ class _BodyState extends State<Body> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [Text("Hi There")],
-              )
-            ],
-          ),
+          FutureBuilder(
+              future: getUser(),
+              builder: (context, datas) {
+                if (!datas.hasData) {
+                  return const Text("Loading...");
+                } else {
+                  var user = datas.data as UserBody;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [Text("Hi ${user.username}", style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                        ),)],
+                      )
+                    ],
+                  );
+                }
+              }),
           Expanded(
               flex: 8,
               child: FutureBuilder(
@@ -85,18 +116,29 @@ class _BodyState extends State<Body> {
                           shrinkWrap: true,
                           itemCount: items.length,
                           itemBuilder: (context, index) {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                            return Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: white,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    BodyCardHeader(
-                                        items: items, index: index),
-                                    BodyCard(items: items, index: index)
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        BodyCardHeader(
+                                            items: items, index: index),
+                                        BodyCard(items: items, index: index)
+                                      ],
+                                    )
                                   ],
-                                )
-                              ],
+                                ),
+                              ),
                             );
                           });
                     }
@@ -124,16 +166,25 @@ class BodyCardHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(children: [
-          Text("Order #${items[index].id}"),
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text("Order #${items[index].id}", style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: black,
+          ),),
           Text(
             items[index].date,
-            style: const TextStyle(color: lightGray),
-          )
+            style: const TextStyle(
+              color: lightGray,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ]),
         Container(
           alignment: Alignment.centerRight,
-          child: Text(items[index].total.toString()),
+          child: Text("Total: \$"+items[index].total.toString(),style: const TextStyle(
+            color: black,
+            fontWeight: FontWeight.bold,
+          ),),
         )
       ],
     ));
@@ -153,33 +204,61 @@ class BodyCard extends StatelessWidget {
     return Column(
       children: [
         ListView.builder(
-          scrollDirection: Axis.vertical,
+            scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemCount: items[index].products.length,
             itemBuilder: (context, idx) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: size.height * 0.14,
-                      width: size.width * 0.14,
-                      child: Image.network("http://192.168.1.12:5000/"+items[index].products[idx].image.replaceAllMapped(RegExp(r'\\'), (match) => '/'),fit: BoxFit.cover,)),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(size.width*0.1),
+                      child: SizedBox(
+                          height: size.height * 0.14,
+                          width: size.width * 0.2,
+                          child: Image.network(
+                            "http://192.168.1.12:5000/" +
+                                items[index].products[idx].image.replaceAllMapped(
+                                    RegExp(r'\\'), (match) => '/'),
+                            fit: BoxFit.cover,
+                          )),
+                    ),
                     Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: Container(
-                              color:black,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(items[index].products[idx].title),
-                                  Text(items[index].products[idx].description),
-                                  Text(items[index].products[idx].price.toString()),
+                                  Text(items[index].products[idx].title, style: const TextStyle(
+                                    color: black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20),
+                                    child: Text(
+                                        items[index].products[idx].description, style: const TextStyle(
+                                          color: lightGray,
+                                          fontWeight: FontWeight.bold
+                                        ),),
+                                  ),
+                                  Text("\$ "+items[index]
+                                      .products[idx]
+                                      .price
+                                      .toString(), style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: black
+                                      ),),
                                 ],
                               ),
                             ),
