@@ -120,9 +120,16 @@ class _BodyState extends State<Body> {
                               padding: const EdgeInsets.all(16.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: white,
-                                ),
+                                color: white,
+                                border: Border.all(color: borderColor),
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: shadowColor,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 3),
+                                  )
+                                ]),
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,

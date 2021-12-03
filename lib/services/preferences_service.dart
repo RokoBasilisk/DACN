@@ -24,6 +24,7 @@ class PreferencesService {
   Future removeToken() async {
     final preferences = await SharedPreferences.getInstance();
     preferences.remove("Token");
+    preferences.remove("customerId");
   }
 
   Future addSettings(CartItem cartItem) async {

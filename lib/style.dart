@@ -10,3 +10,6 @@ const transparent = Colors.transparent;
 const lightGray = Color.fromARGB(255, 130, 111, 111);
 const lightColor = Color(0xFFF1E6FF);
 const itemBackground = Color.fromARGB(255, 239, 238, 241);
+const borderColor = Color.fromARGB(100, 130, 111, 111);
+const shadowColor = Color.fromRGBO(130, 111, 111, 0.5);
+const accountButtonActive = Color.fromARGB(255, 51, 65, 72);

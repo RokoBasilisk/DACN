@@ -53,6 +53,7 @@ class _AccountScreenState extends State<AccountScreen> {
       const Icon(Icons.person),
     ];
     return Scaffold(
+      extendBody: true,
       backgroundColor: const Color.fromARGB(255, 246, 246, 246),
         floatingActionButton: buildNavigateButton(),
         bottomNavigationBar: Theme(
