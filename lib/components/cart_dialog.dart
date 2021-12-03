@@ -155,7 +155,7 @@ class _CartDialogState extends State<CartDialog> {
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Total"),
+                              const Text("Total"),
                               Text(() {
                                 for (int i = 0; i < data.length; i++) {
                                   total =

@@ -285,6 +285,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 case 1:
                   Navigator.of(context).pushNamed("/Bill");
                   break;
+                case 2:
+                  Navigator.of(context).pushNamed("/Account");
+                  break;
                 default:
                   return;
               }

@@ -86,7 +86,10 @@ class _ItemDetailState extends State<ItemDetail> {
                   Navigator.of(context).pushNamed("/");
                   break;
                 case 1:
-                  Navigator.of(context).pushNamed("/");
+                  Navigator.of(context).pushNamed("/Bill");
+                  break;
+                case 2:
+                  Navigator.of(context).pushNamed("/Account");
                   break;
                 default:
                   return;

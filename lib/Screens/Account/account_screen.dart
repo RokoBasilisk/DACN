@@ -1,18 +1,18 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:foodorder/Screens/Bill/components/body.dart';
+import 'package:foodorder/Screens/Account/components/body.dart';
 import 'package:foodorder/components/cart_dialog.dart';
 import 'package:foodorder/style.dart';
 
-class BillScreen extends StatefulWidget {
-  const BillScreen({Key? key}) : super(key: key);
+class AccountScreen extends StatefulWidget {
+  const AccountScreen({Key? key}) : super(key: key);
 
   @override
-  _BillScreenState createState() => _BillScreenState();
+  _AccountScreenState createState() => _AccountScreenState();
 }
 
-class _BillScreenState extends State<BillScreen> {
-  int index = 1;
+class _AccountScreenState extends State<AccountScreen> {
+  int index = 2;
 
   @override
   void initState() {
@@ -74,9 +74,6 @@ class _BillScreenState extends State<BillScreen> {
                   Navigator.of(context).pushNamed('/');
                   break;
                 case 1:
-                  break;
-                case 2:
-                  Navigator.of(context).pushNamed("/Account");
                   break;
                 default:
                   return;

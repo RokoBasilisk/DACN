@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodorder/Screens/Account/account_screen.dart';
 import 'package:foodorder/Screens/Bill/bill_screen.dart';
 import 'package:foodorder/Screens/Login/login_screen.dart';
 import 'package:foodorder/Screens/Signup/signup_screen.dart';
@@ -23,6 +24,8 @@ class RouteGenerator {
         return _errorRoute();
       case '/Bill':
         return MaterialPageRoute(builder: (_) => const BillScreen());
+      case "/Account":
+        return MaterialPageRoute(builder: (_) => const AccountScreen());
       case '/itemDetail':
         if (args is Product) {
           return MaterialPageRoute(builder: (_) => ItemDetail(item: args));
