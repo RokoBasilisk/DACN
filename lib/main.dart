@@ -72,7 +72,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-Widget popularCard() {
+Widget popularCard(Size size) {
   return FutureBuilder(
       future: getData(),
       builder: (context, snapshots) {
@@ -85,60 +85,63 @@ Widget popularCard() {
             shrinkWrap: true,
             itemCount: items.length,
             itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context)
-                      .pushNamed('/itemDetail', arguments: items[index]);
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: AspectRatio(
-                        aspectRatio: 4 / 3,
-                        child: Image.asset(
-                          'assets/images/burgercheddar.png',
-                          height: 140.0,
-                          width: 140.0,
-                          fit: BoxFit.cover,
-                        ),
+              return Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed('/itemDetail', arguments: items[index]);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                            height: size.height * 0.14,
+                            width: size.width * 0.23,
+                            child: Image.network(
+                              "http://192.168.1.12:5000/" +
+                                  items[index].image.replaceAllMapped(
+                                      RegExp(r'\\'), (match) => '/'),
+                              fit: BoxFit.cover,
+                            )),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Text((() {
-                        var x = items[index].title;
-                        if (x.length >= 14) {
-                          return x.substring(0, 13) + "...";
-                        }
-                        return x;
-                      })(),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: black,
-                          )),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                          text: "\$ ",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: dolar,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: items[index].price.toString(),
-                              style: const TextStyle(
-                                fontSize: 26,
-                                fontWeight: FontWeight.bold,
-                                color: black,
-                              ),
-                            )
-                          ]),
-                    )
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Text((() {
+                          var x = items[index].title;
+                          if (x.length >= 14) {
+                            return x.substring(0, 13) + "...";
+                          }
+                          return x;
+                        })(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: black,
+                            )),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                            text: "\$ ",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: dolar,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: items[index].price.toString(),
+                                style: const TextStyle(
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold,
+                                  color: black,
+                                ),
+                              )
+                            ]),
+                      )
+                    ],
+                  ),
                 ),
               );
             },
@@ -430,7 +433,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  popularCard(),
+                                  popularCard(size),
                                 ],
                               ),
                             ),

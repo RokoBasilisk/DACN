@@ -66,6 +66,8 @@ class _ItemDetailState extends State<ItemDetail> {
           },
         );
     return Scaffold(
+        extendBodyBehindAppBar: true,
+        extendBody: true,
         floatingActionButton: buildNavigateButton(),
         bottomNavigationBar: Theme(
           data: Theme.of(context)
@@ -116,190 +118,192 @@ class _ItemDetailState extends State<ItemDetail> {
           centerTitle: true,
           backgroundColor: yellow,
         ),
-        body: SafeArea(
-          child: Container(
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage('assets/images/background.png'),
-              fit: BoxFit.fill,
-            )),
-            child: Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: 200,
-                    height: 250,
-                    // child: Image.network(
-                    //   "http://192.168.1.12:5000/${item.image.replaceAllMapped(RegExp(r'[\\]+'), (match) => '/')}",
-                    //   fit: BoxFit.cover,
-                    // )
-                    child: Image.asset(
-                      'assets/images/burgercheddar.png',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: Container(
-                      color: primarycolor,
-                      width: 180,
-                      height: 46,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () => setState(() {
-                              if (_quantity != 1) {
-                                _quantity -= 1;
-                              }
-                            }),
-                            child: const Icon(
-                              Icons.remove,
-                              color: white,
-                              size: 16,
-                            ),
-                          ),
-                          Text(
-                            _quantity.toString(),
-                            style: const TextStyle(
-                              color: white,
-                              fontSize: 26,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () => setState(() {
-                              _quantity += 1;
-                            }),
-                            child: const Icon(
-                              Icons.add,
-                              color: white,
-                              size: 16,
-                            ),
-                          )
-                        ],
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Container(
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                image: AssetImage('assets/images/background.png'),
+                fit: BoxFit.fill,
+              )),
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      height: 250,
+                      // child: Image.network(
+                      //   "http://192.168.1.12:5000/${item.image.replaceAllMapped(RegExp(r'[\\]+'), (match) => '/')}",
+                      //   fit: BoxFit.cover,
+                      // )
+                      child: Image.asset(
+                        'assets/images/burgercheddar.png',
+                        fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(30),
+                      child: Container(
+                        color: primarycolor,
+                        width: 180,
+                        height: 46,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () => setState(() {
+                                if (_quantity != 1) {
+                                  _quantity -= 1;
+                                }
+                              }),
+                              child: const Icon(
+                                Icons.remove,
+                                color: white,
+                                size: 16,
+                              ),
+                            ),
+                            Text(
+                              _quantity.toString(),
+                              style: const TextStyle(
+                                color: white,
+                                fontSize: 26,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => setState(() {
+                                _quantity += 1;
+                              }),
+                              child: const Icon(
+                                Icons.add,
+                                color: white,
+                                size: 16,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.title,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                const Text(
+                                  "Category",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: lightGray,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                text: "\$",
+                                style: const TextStyle(
+                                    color: primarycolor, fontSize: 24),
+                                children: [
+                                  TextSpan(
+                                    text: item.price.toString(),
+                                    style: const TextStyle(
+                                      color: black,
+                                      fontSize: 36,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.title,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              const Text(
-                                "Category",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: lightGray,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          RichText(
-                            text: TextSpan(
-                              text: "\$",
-                              style: const TextStyle(
-                                  color: primarycolor, fontSize: 24),
-                              children: [
-                                TextSpan(
-                                  text: item.price.toString(),
-                                  style: const TextStyle(
-                                    color: black,
-                                    fontSize: 36,
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
+                          iconScore("4.8", "star.png", Colors.yellow),
+                          iconScore("150 Kcal", "fire.png", Colors.orange[900]),
+                          iconScore("10 - 15 min", "clock.png", primarycolor)
                         ],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        iconScore("4.8", "star.png", Colors.yellow),
-                        iconScore("150 Kcal", "fire.png", Colors.orange[900]),
-                        iconScore("10 - 15 min", "clock.png", primarycolor)
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 60, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        RichText(
-                          maxLines: 3,
-                          softWrap: true,
-                          text: TextSpan(
-                            text: item.description,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: lightGray,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        maximumSize: const Size(250.0, 54.0),
-                        primary: primarycolor,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(30)))),
-                    onPressed: () {
-                      CartItem cartItem = CartItem(item.id, item.title, "abc",
-                          item.description, 2, _quantity);
-                      _saveSettings(cartItem);
-                    },
-                    child: Padding(
+                    Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            "Add To Cart",
-                            style: TextStyle(fontSize: 16, color: white),
+                          horizontal: 60, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          RichText(
+                            maxLines: 6,
+                            softWrap: true,
+                            text: TextSpan(
+                              text: item.description,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: lightGray,
+                              ),
+                            ),
                           ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Icon(
-                            Icons.add_shopping_cart_rounded,
-                            size: 24,
-                          )
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          maximumSize: const Size(250.0, 54.0),
+                          primary: primarycolor,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30)))),
+                      onPressed: () {
+                        CartItem cartItem = CartItem(item.id, item.title, "abc",
+                            item.description, 2, _quantity);
+                        _saveSettings(cartItem);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text(
+                              "Add To Cart",
+                              style: TextStyle(fontSize: 16, color: white),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Icon(
+                              Icons.add_shopping_cart_rounded,
+                              size: 24,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

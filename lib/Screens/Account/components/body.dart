@@ -105,13 +105,15 @@ class _BodyState extends State<Body> {
                       color: white,
                       textColor: accountButtonActive,
                       press: () {},
-                      icon: Icons.verified_outlined),
+                      icon: Icons.notifications_outlined),
                   AccountButton(
-                      text: "Authentication",
+                      text: "Change Password",
                       color: white,
                       textColor: accountButtonActive,
-                      press: () {},
-                      icon: Icons.notifications_outlined),
+                      press: () {
+                        Navigator.of(context).pushNamed("/Changepassword");
+                      },
+                      icon: Icons.lock),
                   AccountButton(
                       text: "Sign Out",
                       color: accountButtonActive,

@@ -4,24 +4,27 @@ import 'package:foodorder/style.dart';
 
 class RoundedPasswordField extends StatelessWidget {
   final ValueChanged<String> onChanged;
+  final double horizontal;
   const RoundedPasswordField({
-    Key? key, 
+    Key? key,
     required this.onChanged,
+    this.horizontal = 0,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
+      horizontal: horizontal,
       child: TextField(
         onChanged: onChanged,
         obscureText: true,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           hintText: "Password",
-          icon: Icon(
+          icon: const Icon(
             Icons.lock,
             color: purple,
           ),
-          suffixIcon: Icon(
+          suffixIcon: const Icon(
             Icons.visibility,
             color: purple,
           ),

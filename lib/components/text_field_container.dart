@@ -3,9 +3,11 @@ import 'package:foodorder/style.dart';
 
 class TextFieldContainer extends StatelessWidget {
   final Widget child;
+  final double horizontal;
   const TextFieldContainer({
     Key? key,
     required this.child,
+    this.horizontal = 20,
   }) : super(key: key);
 
   @override
@@ -16,7 +18,7 @@ class TextFieldContainer extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(29),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          padding: EdgeInsets.symmetric(horizontal: horizontal, vertical: 5),
           child: Container(
             width: size.width * 0.8,
             color: lightColor,

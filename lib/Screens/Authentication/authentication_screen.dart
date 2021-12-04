@@ -1,17 +1,17 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:foodorder/Screens/Account/components/body.dart';
+import 'package:foodorder/Screens/Authentication/components/body.dart';
 import 'package:foodorder/components/cart_dialog.dart';
 import 'package:foodorder/style.dart';
 
-class AccountScreen extends StatefulWidget {
-  const AccountScreen({Key? key}) : super(key: key);
+class AuthenticationScreen extends StatefulWidget {
+  const AuthenticationScreen({Key? key}) : super(key: key);
 
   @override
-  _AccountScreenState createState() => _AccountScreenState();
+  _AuthenticationScreenState createState() => _AuthenticationScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _AuthenticationScreenState extends State<AuthenticationScreen> {
   int index = 2;
 
   @override
@@ -53,7 +53,9 @@ class _AccountScreenState extends State<AccountScreen> {
       const Icon(Icons.person),
     ];
     return Scaffold(
-        extendBody: true,
+        appBar: AppBar(
+          
+        ),
         backgroundColor: const Color.fromARGB(255, 246, 246, 246),
         floatingActionButton: buildNavigateButton(),
         bottomNavigationBar: Theme(
@@ -76,6 +78,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   break;
                 case 1:
                   Navigator.of(context).pushNamed("/Bill");
+                  break;
+                case 2:
+                  Navigator.of(context).pushNamed("/Account");
                   break;
                 default:
                   return;
