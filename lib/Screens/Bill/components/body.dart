@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:foodorder/style.dart';
 import 'package:foodorder/Screens/Bill/components/background.dart';
 import 'package:foodorder/models/bill_history_model.dart';
 import 'package:foodorder/models/product.dart';
@@ -9,6 +10,8 @@ import 'package:foodorder/models/userbody.dart';
 import 'package:foodorder/services/preferences_service.dart';
 import 'package:foodorder/style.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:intl/intl_browser.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -23,7 +26,7 @@ class _BodyState extends State<Body> {
     Set set = await _preferencesService.getToken();
     Map<String, dynamic> customerId = {"customerId": set.elementAt(1)};
     final response =
-        await http.post(Uri.http('192.168.1.12:5000', 'api/customer'),
+        await http.post(Uri.http('192.168.1.6:5000', 'api/customer'),
             headers: {
               "Content-Type": "application/json",
               HttpHeaders.authorizationHeader: 'Bearer ${set.elementAt(0)}'
@@ -39,12 +42,13 @@ class _BodyState extends State<Body> {
     final _preferencesService = PreferencesService();
     Set set = await _preferencesService.getToken();
     Map<String, dynamic> customerId = {"customerId": set.elementAt(1)};
-    final response = await http.post(Uri.http('192.168.1.12:5000', 'api/bill/get'),
-        headers: {
-          "Content-Type": "application/json",
-          HttpHeaders.authorizationHeader: 'Bearer ${set.elementAt(0)}'
-        },
-        body: jsonEncode(customerId));
+    final response =
+        await http.post(Uri.http('192.168.1.6:5000', 'api/bill/get'),
+            headers: {
+              "Content-Type": "application/json",
+              HttpHeaders.authorizationHeader: 'Bearer ${set.elementAt(0)}'
+            },
+            body: jsonEncode(customerId));
     final jsondata = jsonDecode(response.body);
     List<BillHistory> data = [];
     if (jsondata['success']) {
@@ -66,7 +70,8 @@ class _BodyState extends State<Body> {
             id: x['_id'],
             products: products,
             total: x['total'],
-            customerName: x['customer']['username']);
+            customerName: x['customer']['username'],
+            status: x['status']);
         data.add(bill);
       }
       return data;
@@ -93,10 +98,15 @@ class _BodyState extends State<Body> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Column(
-                        children: [Text("Hi ${user.username}", style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                        ),)],
+                        children: [
+                          Text(
+                            "Hi ${user.username}",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                            ),
+                          )
+                        ],
                       )
                     ],
                   );
@@ -120,16 +130,16 @@ class _BodyState extends State<Body> {
                               padding: const EdgeInsets.all(16.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                color: white,
-                                border: Border.all(color: borderColor),
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: shadowColor,
-                                    blurRadius: 4,
-                                    offset: Offset(0, 3),
-                                  )
-                                ]),
+                                    color: white,
+                                    border: Border.all(color: borderColor),
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: shadowColor,
+                                        blurRadius: 4,
+                                        offset: Offset(0, 3),
+                                      )
+                                    ]),
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -168,18 +178,27 @@ class BodyCardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var col = yellow;
+    DateTime parseDate =
+        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(items[index].date);
+    var inputDate = DateTime.parse(parseDate.toString());
+    var outputFormat = DateFormat('MM/dd/yyyy hh:mm a');
+    var outputDate = outputFormat.format(inputDate);
     return ListTile(
         title: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text("Order #${items[index].id}", style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: black,
-          ),),
           Text(
-            items[index].date,
+            "Order #${items[index].id}",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: black,
+            ),
+          ),
+          Text(
+            outputDate,
             style: const TextStyle(
               color: lightGray,
               fontWeight: FontWeight.bold,
@@ -187,12 +206,46 @@ class BodyCardHeader extends StatelessWidget {
           ),
         ]),
         Container(
-          alignment: Alignment.centerRight,
-          child: Text("Total: \$"+items[index].total.toString(),style: const TextStyle(
-            color: black,
-            fontWeight: FontWeight.bold,
-          ),),
-        )
+            alignment: Alignment.centerRight,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Total: \$" + items[index].total.toString(),
+                  style: const TextStyle(
+                    color: black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: (() {
+                      if (items[index].status == "Waiting") {
+                        col = green;
+                      }
+                      switch (items[index].status) {
+                        case "Accepted":
+                          col = green;
+                          break;
+                        case "Rejected":
+                          col = dolar;
+                          break;
+                        default:
+                          col = yellow;
+                          break;
+                      }
+                      return col;
+                    }()))),
+                    child: Text(
+                      items[index].status.toString(),
+                      style: TextStyle(
+                        color: col
+                      ),
+                    ))
+              ],
+            ))
       ],
     ));
   }
@@ -222,14 +275,17 @@ class BodyCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(size.width*0.1),
+                      borderRadius: BorderRadius.circular(size.width * 0.1),
                       child: SizedBox(
                           height: size.height * 0.14,
                           width: size.width * 0.2,
                           child: Image.network(
-                            "http://192.168.1.12:5000/" +
-                                items[index].products[idx].image.replaceAllMapped(
-                                    RegExp(r'\\'), (match) => '/'),
+                            "http://192.168.1.6:5000/" +
+                                items[index]
+                                    .products[idx]
+                                    .image
+                                    .replaceAllMapped(
+                                        RegExp(r'\\'), (match) => '/'),
                             fit: BoxFit.cover,
                           )),
                     ),
@@ -245,27 +301,34 @@ class BodyCard extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(items[index].products[idx].title, style: const TextStyle(
-                                    color: black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),),
+                                  Text(
+                                    items[index].products[idx].title,
+                                    style: const TextStyle(
+                                      color: black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 20),
                                     child: Text(
-                                        items[index].products[idx].description, style: const TextStyle(
+                                      items[index].products[idx].description,
+                                      style: const TextStyle(
                                           color: lightGray,
-                                          fontWeight: FontWeight.bold
-                                        ),),
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                  Text("\$ "+items[index]
-                                      .products[idx]
-                                      .price
-                                      .toString(), style: const TextStyle(
+                                  Text(
+                                    "\$ " +
+                                        items[index]
+                                            .products[idx]
+                                            .price
+                                            .toString(),
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        color: black
-                                      ),),
+                                        color: black),
+                                  ),
                                 ],
                               ),
                             ),

@@ -4,6 +4,7 @@ const primarycolor = Color.fromARGB(255, 245, 71, 73);
 const white = Colors.white;
 const black = Colors.black;
 const purple = Colors.purple;
+const green = Colors.greenAccent;
 const dolar = Color.fromARGB(255, 245, 71, 73);
 const yellow = Color.fromARGB(255, 254, 235, 195);
 const transparent = Colors.transparent;

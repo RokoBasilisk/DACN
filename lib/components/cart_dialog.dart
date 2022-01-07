@@ -204,7 +204,7 @@ Future postData(BuildContext context) async {
         Bill(customerId: token.elementAt(1), products: products, total: total);
     List<Bill> list = [bill];
     if (token != "") {
-      final Uri apiURL = Uri.http("192.168.1.12:5000", "api/bill");
+      final Uri apiURL = Uri.http("192.168.1.6:5000", "api/bill");
       final response = await http.post(apiURL,
           headers: {
             "Content-Type": "application/json",

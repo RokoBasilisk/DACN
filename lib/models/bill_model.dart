@@ -4,6 +4,7 @@ class Bill {
   final List<Miniproduct> products;
   final double total;
   final String customerId;
+  
 
   Bill({required this.products, required this.total, required this.customerId});
 

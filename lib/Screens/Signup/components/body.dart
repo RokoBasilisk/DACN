@@ -75,7 +75,7 @@ void handle(data, BuildContext context) {
 
 Future<Map> createUser(UserModel user) async {
   final newUser = json.encode(user);
-  final Uri apiURL = Uri.http("192.168.1.12:5000", "api/customer/register");
+  final Uri apiURL = Uri.http("192.168.1.6:5000", "api/customer/register");
   final response = await http.post(apiURL,
       headers: {"Content-Type": "application/json"}, body: newUser);
   if (response.statusCode == 200) {

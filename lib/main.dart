@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 
 Future getData() async {
   final response =
-      await http.get(Uri.http('192.168.1.12:5000', 'api/products'), headers: {
+      await http.get(Uri.http('192.168.1.6:5000', 'api/products'), headers: {
     HttpHeaders.authorizationHeader:
         'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTg0YTY3MmRlYWM5NThmNDM2Y2ZjODYiLCJpYXQiOjE2MzY2MjQxMTZ9.CDz-U3kFPPqR-nd05w9F8AuPo_VaYPb0fv04i7GwUOM'
   });
@@ -100,7 +100,7 @@ Widget popularCard(Size size) {
                             height: size.height * 0.14,
                             width: size.width * 0.23,
                             child: Image.network(
-                              "http://192.168.1.12:5000/" +
+                              "http://192.168.1.6:5000/" +
                                   items[index].image.replaceAllMapped(
                                       RegExp(r'\\'), (match) => '/'),
                               fit: BoxFit.cover,

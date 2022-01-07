@@ -8,6 +8,7 @@ class BillHistory {
   final double total;
   final String customerName;
   bool isExpanded;
+  final String status;
 
   BillHistory(
       {required this.date,
@@ -15,7 +16,8 @@ class BillHistory {
       required this.products,
       required this.total,
       required this.customerName,
-      this.isExpanded = false});
+      this.isExpanded = false,
+      required this.status});
 
   Map<String, dynamic> toJson() => {
         'date': date,
@@ -23,6 +25,7 @@ class BillHistory {
         'products': products,
         'total': total,
         'customerId': customerName,
+        'status': status
       };
 
   static Map<String, dynamic> toMap(BillHistory bill) => {
@@ -31,6 +34,7 @@ class BillHistory {
         'products': bill.products,
         'total': bill.total,
         'customerId': bill.customerName,
+        'status': bill.status
       };
   static String encode(List<BillHistory> bills) => jsonEncode(
         bills

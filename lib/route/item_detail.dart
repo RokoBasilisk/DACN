@@ -136,10 +136,13 @@ class _ItemDetailState extends State<ItemDetail> {
                       //   "http://192.168.1.12:5000/${item.image.replaceAllMapped(RegExp(r'[\\]+'), (match) => '/')}",
                       //   fit: BoxFit.cover,
                       // )
-                      child: Image.asset(
-                        'assets/images/burgercheddar.png',
-                        fit: BoxFit.cover,
-                      ),
+                      child: Image.network(
+                            "http://192.168.1.6:5000/" +
+                                item.image
+                                    .replaceAllMapped(
+                                        RegExp(r'\\'), (match) => '/'),
+                            fit: BoxFit.cover,
+                          )
                     ),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(30),
@@ -277,8 +280,8 @@ class _ItemDetailState extends State<ItemDetail> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(30)))),
                       onPressed: () {
-                        CartItem cartItem = CartItem(item.id, item.title, "abc",
-                            item.description, 2, _quantity);
+                        CartItem cartItem = CartItem(item.id, item.title, item.description,
+                            item.description, item.price, _quantity);
                         _saveSettings(cartItem);
                       },
                       child: Padding(
